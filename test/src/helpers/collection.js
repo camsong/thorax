@@ -201,6 +201,15 @@ describe('collection helper', function() {
     testNesting(view, 'nested inline');
   });
 
+  it('should render select tag with name attribute', function() {
+    var view = new Thorax.View({
+      collection: new Thorax.Collection([{id: 1}, {id: 2}]),
+      template: Handlebars.compile('{{#collection tag="select" name="broken_select" class="test_class"}}<option value="{{id}}">{{id}}</option>{{/collection}}')
+    });
+    view.render();
+    expect(view.$('select[name="broken_select"]').length).to.equal(1);
+  });
+
   describe('delgation', function() {
     var view,
         spy;
