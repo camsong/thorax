@@ -12,22 +12,6 @@ describe('collection helper', function() {
     runCollectionTests(view);
   });
 
-  //Colin working on issue #159
-  //What 
-  it('should render div tag even if div tag is the last element before the closing collection helper', function(){
-
-    var dummyCollection = new Thorax.Collection([{key: 'value'}]);
-
-    var view = new Thorax.View({
-      collection: dummyCollection, 
-      template: Handlebars.compile('{{#collection dummyCollection class="baz"}}<div> </div>{{/collection}}')
-    });
-    view.render();
-    expect(/<\/div>/.test(view.html())).to.be.true;
-    
-    runCollectionTests(view);
-  });
-
   it('should render item-view', function() {
     var view = new Thorax.View({
       template: Handlebars.compile('{{collection tag="ul" empty-template="letter-empty" item-view="letter-item"}}')
@@ -311,5 +295,24 @@ describe('collection helper', function() {
           .to.have.been.calledOnce
           .to.have.been.calledOn(view);
     });
+
+    //Colin working on issue #159
+    //What 
+    it('render div tag even if div tag is the last element before the closing collection helper', function(){
+  
+      var imageGroups = new Thorax.Collection([{
+        caption: 'beautiful',
+        items: new Thorax.Collection([{img: 'cruel'}])
+      }]);
+  
+      var view = new Thorax.View({
+        collection: imageGroups, 
+        template: Handlebars.compile('{{#collection imageGroups class="image-groups"}}<div class="card"><h2>{{{caption}}}</h2>{{#collection items class="image-items"}}<div class="card-image"><b>in card</b>{{{img}}}</div>{{/collection}}<b>after card images</b></div>{{/collection}}')
+      });
+      view.render();
+  
+      expect(/<\/div>/.test(view.html()).length).to.equal(2);  
+    });
+
   });
 });
