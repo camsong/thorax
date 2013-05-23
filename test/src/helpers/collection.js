@@ -12,6 +12,22 @@ describe('collection helper', function() {
     runCollectionTests(view);
   });
 
+  //Colin working on issue #159
+  //What 
+  it('should render div tag even if div tag is the last element before the closing collection helper', function(){
+
+    var dummyCollection = new Thorax.Collection([{key: 'value'}]);
+
+    var view = new Thorax.View({
+      collection: dummyCollection, 
+      template: Handlebars.compile('{{#collection dummyCollection class="baz"}}<div> </div>{{/collection}}')
+    });
+    view.render();
+    expect(/<\/div>/.test(view.html())).to.be.true;
+    
+    runCollectionTests(view);
+  });
+
   it('should render item-view', function() {
     var view = new Thorax.View({
       template: Handlebars.compile('{{collection tag="ul" empty-template="letter-empty" item-view="letter-item"}}')
