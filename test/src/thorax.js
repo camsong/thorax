@@ -240,4 +240,25 @@ describe('core', function() {
       expect(view.html()).to.contain('t');
     });
   });
+
+  describe("mixins", function() {
+    before(function() {
+      Thorax.View.registerMixin('test', function(){}, {
+        mixinTest: 'value'
+      });
+    });
+
+    it("view can inherit mixins via mixin method", function() {
+      var MyView = Thorax.View.extend();
+      MyView.mixin('test');
+      expect((new MyView()).mixinTest).to.equal('value');
+    });
+
+    it("view can inherit mixins via mixins property", function() {
+      var MyView = Thorax.View.extend({
+        mixins: ["test"]
+      });
+      expect((new MyView()).mixinTest).to.equal('value');
+    });
+  });
 });
